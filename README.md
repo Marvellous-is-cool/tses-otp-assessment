@@ -165,6 +165,9 @@ Generates a 6-digit OTP and dispatches it via email (logged to Celery worker out
 | `400`  | Invalid or missing email | DRF validation errors                                          |
 | `429`  | Rate limit exceeded      | `{ "error": "...", "retry_after": 42 }` + `Retry-After` header |
 
+**Sample Image**
+![Success Request](sample/request.png)
+
 ---
 
 ### `POST /api/v1/auth/otp/verify`
@@ -185,6 +188,9 @@ Validates the submitted OTP, issues JWT tokens on success, and deletes the OTP t
 | `400`  | OTP wrong or expired              | `{ "error": "...", N attempts remaining }`               |
 | `423`  | Account locked after max failures | `{ "error": "...", "unlock_eta": 847 }`                  |
 
+**Sample Image**
+![Success Verify](sample/verify.png)
+
 ---
 
 ### `GET /api/v1/audit/logs`
@@ -202,6 +208,9 @@ curl http://localhost:8000/api/v1/audit/logs \
   -H "Authorization: Bearer <access_token>" \
   -G --data-urlencode "event=OTP_FAILED"
 ```
+
+**Sample Image**
+![Success Audit](sample/audit.png)
 
 ---
 
@@ -297,7 +306,10 @@ SIMPLE_JWT = {
 
 ## Test Suite
 
-All 30 tests pass. Run them with:
+All 30 tests pass.
+![Test Pass](tests/test_result.png)
+
+Run them with:
 
 ```bash
 docker compose exec web pytest apps/accounts/tests.py -v
@@ -356,4 +368,5 @@ The `fake_redis` fixture is `autouse=True`, so it applies to every test. The cou
 | Dockerized stack                 | `web`, `celery_worker`, `postgres`, `redis` with health checks | `docker-compose.yml`                               |
 | Config via environment           | `python-decouple` throughout `settings.py`                     | `settings.py`                                      |
 | 30 passing tests                 | pytest with fakeredis, `_atomic_increment` patched             | `tests.py`, `conftest.py`                          |
-# tess-otp-assessment
+
+# tses-otp-assessment
